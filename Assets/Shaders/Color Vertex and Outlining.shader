@@ -10,8 +10,6 @@ Shader "Custom/ColorVertexandOutlining"
     {
         CGPROGRAM
         #pragma surface surf Lambert
-        // Use shader model 3.0 target, to get nicer looking lighting
-        #pragma target 3.0
 
         sampler2D _MainTex;
 
@@ -50,9 +48,6 @@ Shader "Custom/ColorVertexandOutlining"
                 v2f o;
                 UNITY_INITIALIZE_OUTPUT(v2f,o)
                 o.vertex = UnityObjectToClipPos(v.vertex);
-                // o.color.r = (v.vertex.x + 5) / 5;
-                // o.color.g = (v.vertex.z + 5) / 5;
-                // o.color.b = (v.vertex.y + 5) / 5;
                 return o;
             }
 

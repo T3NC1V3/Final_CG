@@ -14,7 +14,7 @@ public class CameraLook : MonoBehaviour
     private float rotationY = 0.0f; // Current Y rotation of the camera
     private float rotationX = 0.0f; // Current X rotation of the camera
 
-    private bool cameraLocked = false;
+    private bool cameraLocked = true;
 
     void Start()
     {
@@ -24,9 +24,9 @@ public class CameraLook : MonoBehaviour
         }
 
         // Set initial rotation to match the camera's starting position
-        Vector3 angles = transform.eulerAngles;
-        rotationX = angles.y;
-        rotationY = angles.x;
+        Vector3 angle = transform.eulerAngles;
+        rotationX = angle.y;
+        rotationY = angle.x;
 
         LockCamera(true);
         Cursor.visible = false;

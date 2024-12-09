@@ -2,25 +2,24 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-[RequireComponent(typeof(Rigidbody))]
 public class Movement : MonoBehaviour
 {
-    public float walkSpeed = 8f;           
-    public float runSpeed = 15f;        
-    public float accel = 12f;       
-    public float decel = 15f;       // General Move mechanics
+    public float speed = 8f;           
+    public float turbo = 15f;        
+    public float accelerate = 12f;       
+    public float decelerate = 15f;       // Driving mechanics
 
     public Transform cameraTransform;
 
     private Rigidbody body;
     private Vector3 moveInput;
     private float currentSpeed;
-    private bool isRunning;
+    private bool nitroActive;
 
     private void Start()
     {
         body = GetComponent<Rigidbody>();
-        currentSpeed = walkSpeed;
+        currentSpeed = speed;
 
         if(cameraTransform == null)
         {
@@ -31,14 +30,14 @@ public class Movement : MonoBehaviour
 
     private void Update()
     {
-        // Move Input
+        // Input
         float moveX = Input.GetAxisRaw("Horizontal");
         float moveZ = Input.GetAxisRaw("Vertical");
         moveInput = new Vector3(moveX, 0f, moveZ).normalized;
 
         // Run Input
-        isRunning = Input.GetKey(KeyCode.LeftShift);
-        currentSpeed = isRunning ? runSpeed : walkSpeed;
+        nitroActive = Input.GetKey(KeyCode.LeftShift);
+        currentSpeed = nitroActive ? turbo : speed;
 
         // Update speed
         HandleMovement();
@@ -70,9 +69,9 @@ public class Movement : MonoBehaviour
             Vector3 velocityChange = targetVelocity - new Vector3(velocity.x, 0, velocity.z);
 
             // Apply acceleration or deceleration
-            if (velocityChange.magnitude > accel * Time.deltaTime)
+            if (velocityChange.magnitude > accelerate * Time.deltaTime)
             {
-                velocityChange = velocityChange.normalized * accel * Time.deltaTime;
+                velocityChange = velocityChange.normalized * accelerate * Time.deltaTime;
             }
 
             body.AddForce(velocityChange, ForceMode.VelocityChange);
@@ -81,9 +80,9 @@ public class Movement : MonoBehaviour
         {
             // Slow down when no input is given (deceleration)
             Vector3 horizontalVelocity = new Vector3(body.velocity.x, 0, body.velocity.z);
-            Vector3 decelerationForce = -horizontalVelocity.normalized * decel * Time.deltaTime;
+            Vector3 decelerationForce = -horizontalVelocity.normalized * decelerate * Time.deltaTime;
 
-            if (horizontalVelocity.magnitude < decel * Time.deltaTime)
+            if (horizontalVelocity.magnitude < decelerate * Time.deltaTime)
                 body.velocity = new Vector3(0, body.velocity.y, 0);  // Stop completely
             else
                 body.AddForce(decelerationForce, ForceMode.VelocityChange);
